@@ -117,6 +117,110 @@
   }
 }
 
+@layer components {
+  /* Prose styling for devlog MDX bodies. Hand-rolled rather than pulling in
+     @tailwindcss/typography (zero new deps per the workflow brief). Engineer
+     notebook aesthetic: long-form sans body, mono for code, accent links,
+     hairline section breaks. */
+  .prose-mono {
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.7;
+    max-width: 68ch;
+  }
+  .prose-mono > * + * {
+    margin-top: 1.2em;
+  }
+  .prose-mono h2 {
+    font-family: var(--font-sans);
+    font-size: 26px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+    margin-top: 2.4em;
+    margin-bottom: 0.4em;
+    color: var(--color-fg);
+  }
+  .prose-mono h3 {
+    font-family: var(--font-sans);
+    font-size: 19px;
+    line-height: 1.3;
+    font-weight: 500;
+    margin-top: 1.8em;
+    margin-bottom: 0.3em;
+    color: var(--color-fg);
+  }
+  .prose-mono p {
+    color: var(--color-fg);
+  }
+  .prose-mono a {
+    color: var(--color-fg);
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent-cold);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    transition: text-decoration-color 200ms var(--ease-cinematic);
+  }
+  .prose-mono a:hover {
+    text-decoration-color: var(--color-accent-hot);
+  }
+  .prose-mono strong {
+    font-weight: 600;
+    color: var(--color-fg);
+  }
+  .prose-mono em {
+    font-style: italic;
+  }
+  .prose-mono code {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-grid);
+    padding: 1px 6px;
+    border-radius: 2px;
+  }
+  .prose-mono pre {
+    font-family: var(--font-mono);
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-grid);
+    padding: 18px 22px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .prose-mono pre code {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    font-size: inherit;
+  }
+  .prose-mono ul, .prose-mono ol {
+    padding-left: 1.4em;
+  }
+  .prose-mono ul { list-style-type: disc; }
+  .prose-mono ol { list-style-type: decimal; }
+  .prose-mono li + li {
+    margin-top: 0.3em;
+  }
+  .prose-mono blockquote {
+    border-left: 2px solid var(--color-accent-cold);
+    padding-left: 1.2em;
+    color: var(--color-fg-muted);
+    font-style: italic;
+  }
+  .prose-mono hr {
+    border: 0;
+    border-top: 1px solid var(--color-grid);
+    margin: 2.4em 0;
+  }
+  .prose-mono img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--color-grid);
+  }
+}
+
 /* Reduce motion: kill long entrance animations for vestibular safety */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

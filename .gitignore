@@ -26,4 +26,5 @@ Thumbs.db
 # heavy media (Midjourney MP4 + WebP posters live here, kept out of git)
 public/media/*
 !public/media/.gitkeep
-lh-report.json
+# lighthouse audit outputs, regenerated locally
+lh-*.json

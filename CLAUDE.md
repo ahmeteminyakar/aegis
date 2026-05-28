@@ -97,18 +97,72 @@ label. Site works at every stage between "no media" and "final cut".
 
 ## Devlog
 
-`src/content/devlog/*.mdx`. Frontmatter schema in `src/content.config.ts`:
+`src/content/devlog/YYYY-MM-DD-slug.mdx`. The `YYYY-MM-DD-` prefix in
+the filename is mandatory: it gives stable sort and is stripped from
+the URL by `src/pages/devlog/[...slug].astro`. So
+`2026-06-01-thermal-budget.mdx` becomes `/devlog/thermal-budget`.
+
+Frontmatter schema in `src/content.config.ts`:
 
 ```ts
-title: string
-date: Date
-summary?: string
-draft?: boolean
+title:   string                 // required
+date:    Date                   // required, ISO
+summary: string                 // required, max 200 chars
+tags:    string[]               // default []
+draft:   boolean                // default false; true entries hidden in prod, visible in dev
+cover?:  string                 // optional, public/devlog-covers/ path
 ```
 
-The Devlog section on the landing page currently renders the empty
-state. When the first entry lands, build it out into a list view
-(probably in `src/components/sections/Devlog.astro`).
+Routes:
+
+- `/devlog`            list of non-draft entries (drafts also visible in dev)
+- `/devlog/<slug>`     single entry, wrapped in `src/layouts/DevlogEntry.astro`
+- `/rss.xml`           RSS 2.0 feed, same filter and sort as the index
+
+Sort: date desc, ties broken by filename id (deterministic).
+
+Authoring path: either edit MDX by hand under `src/content/devlog/` or
+invoke the `aegis-devlog-new` skill in a Claude session.
+
+## File layout
+
+```
+.github/workflows/      CI build check
+.claude/                project Claude config: settings.json + skills/
+bom/                    bill of materials (components.csv) + README
+decisions/              MADR ADRs (0001+) + README
+sim/                    stdlib Python sims (thermal_budget.py + future)
+public/
+  media/                hero MP4 + WebP poster (gitignored)
+  og/                   OG image + favicon (committed)
+src/
+  components/           Astro and React primitives (sections/, devlog/)
+  content/devlog/       MDX entries (YYYY-MM-DD-slug.mdx)
+  layouts/              Layout.astro, DevlogEntry.astro
+  pages/                index.astro, devlog/, rss.xml.ts
+  styles/               tokens.css, global.css
+milestones.md           canonical roadmap (mirrored in Roadmap.astro for now)
+```
+
+`D:/dev/projects/aegis/` is a git repo; `dist/`, `node_modules/`,
+`public/media/*`, `lh-report.json`, and `.astro/` are gitignored.
+
+## Workflow
+
+| Task                | Path                                                      |
+| ------------------- | --------------------------------------------------------- |
+| New devlog entry    | `aegis-devlog-new` skill, or hand-edit MDX                |
+| New ADR             | `aegis-decision-new` skill, or hand-edit `decisions/NNNN-slug.md` |
+| Update BOM          | Hand-edit `bom/components.csv`                            |
+| Update milestones   | Hand-edit `milestones.md`                                 |
+| Run thermal sim     | `python sim/thermal_budget.py`                            |
+| Local preview       | `pnpm dev` (drafts visible) or `pnpm build && pnpm preview` (drafts hidden) |
+| Deploy              | `git push` to main; Cloudflare Pages auto-rebuilds        |
+
+The Obsidian vault at `D:/dev/notes/` is not coupled to this repo. If
+Ahmet wants to draft entries in Obsidian first, the convention is to
+write them in the vault, then move the MDX file into
+`src/content/devlog/` once the date prefix is set and `draft: false`.
 
 ## Inspiration set (study, don't lift)
 

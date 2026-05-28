@@ -1,0 +1,48 @@
+---
+import type { CollectionEntry } from "astro:content";
+import readingTime from "reading-time";
+import EntryMeta from "./EntryMeta.astro";
+
+// Index row for a devlog entry. Whole row is the click target.
+// Pattern study: Linear changelog row — tight stacked title + meta with a
+// generous left rule on hover. No card chrome (no border-box around the
+// row) so the list reads as a vertical scan, not a grid of tiles.
+
+interface Props {
+  entry: CollectionEntry<"devlog">;
+  slug: string;
+}
+
+const { entry, slug } = Astro.props;
+const stats = readingTime(entry.body ?? "");
+---
+
+<a
+  href={`/devlog/${slug}`}
+  class="group block py-8 sm:py-10 border-b border-grid transition-colors duration-200 hover:bg-bg-elevated/40"
+>
+  <div class="mx-auto max-w-[1280px] px-6 sm:px-10 grid grid-cols-1 sm:grid-cols-[180px_1fr] gap-4 sm:gap-10">
+    <div class="pt-2">
+      <EntryMeta date={entry.data.date} minutes={stats.minutes} />
+      {entry.data.draft && (
+        <span class="mt-3 inline-block px-2 py-[2px] border border-accent-hot text-accent-hot font-mono text-[10px] tracking-[0.1em] uppercase">
+          draft
+        </span>
+      )}
+    </div>
+    <div>
+      <h2 class="font-sans font-medium text-[22px] sm:text-[26px] leading-[1.2] tracking-[-0.01em] text-fg group-hover:text-fg">
+        {entry.data.title}
+      </h2>
+      <p class="mt-3 text-[15px] sm:text-[16px] leading-[1.55] text-fg-muted max-w-[60ch]">
+        {entry.data.summary}
+      </p>
+      <span class="mt-5 inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.08em] text-fg-muted group-hover:text-fg transition-colors duration-200">
+        read entry
+        <span aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-[3px]">
+          →
+        </span>
+      </span>
+    </div>
+  </div>
+</a>

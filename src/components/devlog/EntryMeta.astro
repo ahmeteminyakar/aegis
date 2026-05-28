@@ -1,0 +1,35 @@
+---
+// Inline meta-row for a devlog entry: ISO date · reading-time · tags.
+// Tabular nums on the date keep monospaced columns aligned in the list.
+// reading-time floors to whole minutes; show "< 1 min" for sub-minute
+// entries so a one-paragraph post does not pretend to take longer.
+
+interface Props {
+  date: Date;
+  minutes: number;
+  tags?: string[];
+}
+
+const { date, minutes, tags = [] } = Astro.props;
+
+const iso = date.toISOString().slice(0, 10);
+const readLabel = minutes < 1 ? "< 1 min" : `${Math.round(minutes)} min`;
+---
+
+<div class="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] tracking-[0.06em] text-fg-muted">
+  <time datetime={iso} class="tabular">{iso}</time>
+  <span aria-hidden="true">/</span>
+  <span>{readLabel} read</span>
+  {tags.length > 0 && (
+    <>
+      <span aria-hidden="true">/</span>
+      <ul class="flex flex-wrap items-center gap-x-2">
+        {tags.map((t) => (
+          <li class="px-2 py-[2px] border border-grid text-fg-muted">
+            {t}
+          </li>
+        ))}
+      </ul>
+    </>
+  )}
+</div>

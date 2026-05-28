@@ -58,23 +58,54 @@ Both files are gitignored. Commit `.gitkeep` only.
 
 ## Adding a devlog entry
 
-```
-src/content/devlog/2026-q3-bench-prototype.mdx
-```
+Filename pattern: `src/content/devlog/YYYY-MM-DD-slug.mdx`. The date
+prefix is mandatory; it gives stable sort and is stripped from the
+URL. So `2026-06-01-thermal-budget.mdx` lives at `/devlog/thermal-budget`.
 
-Frontmatter (see schema in `src/content.config.ts`):
+Frontmatter (full schema in `src/content.config.ts`):
 
 ```mdx
 ---
 title: "Bench prototype, first runs"
 date: 2026-08-12
 summary: "PWM at 4 kHz. PID coefficients off by a factor of three."
+tags: ["pid", "bench"]
+draft: false
 ---
 
-Body in MDX. Code blocks render with shiki.
+Body in MDX. Code blocks render with Shiki. Drafts show in `pnpm dev`,
+hidden in `pnpm build`.
 ```
 
+Two ways to create one:
+
+1. Open a Claude Code session inside the project and ask: *"new devlog
+   entry about bench prototype"*. The `aegis-devlog-new` skill scaffolds
+   the file with frontmatter, draft flag on, and section stubs.
+2. Hand-edit. Copy an existing entry as the template.
+
 Push to `main`. Cloudflare Pages auto-rebuilds.
+
+## Working in this project
+
+The site is one layer of a multi-layer project workspace:
+
+| Path                 | What lives there                                          |
+| -------------------- | --------------------------------------------------------- |
+| `src/content/devlog/`| MDX devlog entries (this repo's blog)                     |
+| `decisions/`         | MADR Architecture Decision Records, numbered 0001+        |
+| `milestones.md`      | Canonical project roadmap (mirrored in `Roadmap.astro`)   |
+| `bom/components.csv` | Hand-edited bill of materials with placeholder costs      |
+| `sim/`               | Stdlib Python simulations (`python sim/thermal_budget.py`)|
+| `.claude/`           | Project-scoped Claude Code config and scaffolding skills  |
+
+Two Claude Code skills are installed under `.claude/skills/`:
+
+* `aegis-devlog-new` — scaffold a new devlog MDX file
+* `aegis-decision-new` — scaffold a new MADR ADR
+
+Hand-editing always works as the fallback. See `CLAUDE.md` for the full
+authoring contract and naming conventions.
 
 ## Deploying to Cloudflare Pages
 

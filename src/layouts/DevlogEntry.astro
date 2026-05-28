@@ -1,0 +1,69 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { MarkdownHeading } from "astro";
+import readingTime from "reading-time";
+import Layout from "./Layout.astro";
+import EntryMeta from "../components/devlog/EntryMeta.astro";
+
+// Wrapper for a single devlog entry. Renders the title + meta + body
+// inside the standard Layout (so OG/SEO/canonical all work).
+
+interface Props {
+  entry: CollectionEntry<"devlog">;
+  headings?: MarkdownHeading[];
+}
+
+const { entry } = Astro.props;
+const stats = readingTime(entry.body ?? "");
+const iso = entry.data.date.toISOString().slice(0, 10);
+const ogImage = entry.data.cover ?? "/og/og.png";
+---
+
+<Layout
+  title={`${entry.data.title}. aegis devlog.`}
+  description={entry.data.summary}
+  ogImage={ogImage}
+>
+  <header class="border-b border-grid">
+    <nav class="mx-auto max-w-[1280px] px-6 sm:px-10 h-14 flex items-center justify-between">
+      <a href="/" class="font-mono text-[13px] tracking-[0.08em] text-fg-muted hover:text-fg transition-colors duration-200">
+        ← aegis
+      </a>
+      <a href="/devlog" class="font-mono text-[12px] tracking-[0.06em] text-fg-muted hover:text-fg transition-colors duration-200">
+        devlog index
+      </a>
+    </nav>
+  </header>
+
+  <main>
+    <article class="mx-auto max-w-[1280px] px-6 sm:px-10 pt-20 sm:pt-28 pb-24 sm:pb-32">
+      <div class="max-w-[68ch]">
+        <span class="mono-label">devlog / entry</span>
+        <h1 class="mt-6 font-sans font-medium text-[40px] sm:text-[56px] leading-[1.05] tracking-[-0.02em] text-fg">
+          {entry.data.title}
+        </h1>
+        <div class="mt-8">
+          <EntryMeta date={entry.data.date} minutes={stats.minutes} tags={entry.data.tags} />
+        </div>
+        {entry.data.draft && (
+          <p class="mt-6 font-mono text-[11px] tracking-[0.08em] uppercase text-accent-hot">
+            draft. not published in the production build.
+          </p>
+        )}
+      </div>
+
+      <div class="mt-14 hairline"></div>
+
+      <div class="prose-mono mt-14">
+        <slot />
+      </div>
+
+      <div class="mt-20 hairline"></div>
+
+      <footer class="mt-10 flex flex-wrap items-baseline justify-between gap-4 font-mono text-[12px] tracking-[0.04em] text-fg-muted">
+        <a href="/devlog" class="hover:text-fg transition-colors duration-200">← all entries</a>
+        <span class="tabular">published {iso}</span>
+      </footer>
+    </article>
+  </main>
+</Layout>

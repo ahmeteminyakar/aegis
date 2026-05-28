@@ -1,0 +1,8 @@
+ref,description,qty,part_no,supplier,unit_cost_usd,link,notes
+TEC1,Peltier module 40x40mm single-stage,1,TEC1-12706,Digikey,5.50,https://www.digikey.com/,placeholder pending bench evaluation
+U1,STM32L4 Cortex-M4F low-power MCU,1,STM32L432KCU6,Mouser,8.20,https://www.mouser.com/,placeholder L4 vs L4-plus depends on FPU need
+BT1,LiPo 500mAh single-cell,1,PL-401221,Adafruit,7.95,https://www.adafruit.com/,placeholder PCB area constraint
+U2,LiPo BMS protection IC pair,1,DW01A+FS8205A,Digikey,0.40,https://www.digikey.com/,placeholder integrated BMS module candidate
+J1,USB-C receptacle 24-pin,1,USB4085-30-A,Digikey,1.20,https://www.digikey.com/,placeholder confirm against enclosure thickness
+U3,6-axis IMU,1,BMI270,Mouser,3.80,https://www.mouser.com/,placeholder Bosch BMI270 candidate
+U4,Skin-temperature sensor I2C,1,TMP117,Mouser,4.10,https://www.mouser.com/,placeholder TI TMP117 candidate

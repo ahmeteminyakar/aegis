@@ -1,15 +1,33 @@
 ---
-// Empty-state devlog placeholder. Dashed border treatment signals
-// "this slot exists, content is coming". Pattern study: Vercel
-// dashboard empty states — mono label, single short line, no fake
-// preview thumbnails.
+import { getCollection } from "astro:content";
+
+// Devlog teaser on the landing page. When there are non-draft entries,
+// shows the latest title + meta + a "view all N →" CTA pointing at the
+// /devlog index. With zero entries, falls back to the dashed-border
+// "coming soon" empty state. Pattern study: Vercel dashboard empty
+// states (kept for the zero case) + Linear changelog rows (used for
+// the populated case).
+
+const entries = (
+  await getCollection("devlog", ({ data }) => !data.draft)
+).sort((a, b) => {
+  const dt = b.data.date.getTime() - a.data.date.getTime();
+  return dt !== 0 ? dt : a.id.localeCompare(b.id);
+});
+
+const count = entries.length;
+const latest = entries[0];
+const latestSlug = latest ? latest.id.replace(/^\d{4}-\d{2}-\d{2}-/, "") : "";
+const latestIso = latest ? latest.data.date.toISOString().slice(0, 10) : "";
 ---
 
 <section id="devlog" class="relative">
   <div class="mx-auto max-w-[1280px] px-6 sm:px-10 py-32 sm:py-40">
     <div class="mb-16 flex items-baseline justify-between border-b border-grid pb-6">
       <span class="mono-label">05 / devlog</span>
-      <span class="mono-label tabular hidden sm:inline">0 entries</span>
+      <span class="mono-label tabular hidden sm:inline">
+        {count === 0 ? "0 entries" : count === 1 ? "1 entry" : `${count} entries`}
+      </span>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-[5fr_6fr] gap-14 lg:gap-20 items-start">
@@ -18,25 +36,54 @@
           Build journal.
         </h2>
         <p class="mt-8 text-[16px] sm:text-[17px] leading-[1.65] text-fg-muted">
-          Honest about what works and what doesn't. First entry: coming soon.
-          When there is hardware on the bench, there will be writing about it
-          here.
+          Honest about what works and what doesn't. New entries land when there
+          is something real to write about.
         </p>
       </div>
 
-      <div class="relative border border-dashed border-grid bg-bg-elevated/30 p-10 sm:p-14 min-h-[280px] flex flex-col justify-center">
-        <span class="absolute top-4 left-4 mono-label">empty.state</span>
-        <span class="absolute top-4 right-4 mono-label tabular">awaiting commit</span>
-
-        <div class="text-center">
-          <p class="font-mono text-[13px] tracking-[0.06em] text-fg-muted">
-            no entries yet. git log will catch up first.
-          </p>
-          <p class="mt-4 font-mono text-[11px] text-fg-muted">
-            $ touch src/content/devlog/2026-q3-bench-prototype.mdx
-          </p>
+      {count === 0 ? (
+        <div class="relative border border-dashed border-grid bg-bg-elevated/30 p-10 sm:p-14 min-h-[280px] flex flex-col justify-center">
+          <span class="absolute top-4 left-4 mono-label">empty.state</span>
+          <span class="absolute top-4 right-4 mono-label tabular">awaiting commit</span>
+          <div class="text-center">
+            <p class="font-mono text-[13px] tracking-[0.06em] text-fg-muted">
+              no entries yet. git log will catch up first.
+            </p>
+            <p class="mt-4 font-mono text-[11px] text-fg-muted">
+              $ touch src/content/devlog/2026-q3-bench-prototype.mdx
+            </p>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div class="flex flex-col gap-4">
+          <a
+            href={`/devlog/${latestSlug}`}
+            class="group relative block border border-grid bg-bg-elevated/40 p-10 sm:p-12 min-h-[280px] flex flex-col justify-between transition-colors duration-200 hover:bg-bg-elevated/70"
+          >
+            <div class="flex items-baseline justify-between">
+              <span class="mono-label">latest</span>
+              <span class="mono-label tabular">{latestIso}</span>
+            </div>
+            <div>
+              <h3 class="font-sans font-medium text-[22px] sm:text-[26px] leading-[1.2] tracking-[-0.01em] text-fg">
+                {latest!.data.title}
+              </h3>
+              <p class="mt-4 text-[15px] leading-[1.55] text-fg-muted max-w-[52ch]">
+                {latest!.data.summary}
+              </p>
+            </div>
+            <span class="font-mono text-[12px] tracking-[0.06em] text-fg-muted group-hover:text-fg transition-colors duration-200">
+              read entry →
+            </span>
+          </a>
+          <a
+            href="/devlog"
+            class="self-end font-mono text-[12px] tracking-[0.06em] text-fg-muted hover:text-fg transition-colors duration-200"
+          >
+            view all {count === 1 ? "1 entry" : `${count} entries`} →
+          </a>
+        </div>
+      )}
     </div>
   </div>
 </section>

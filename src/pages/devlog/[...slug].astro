@@ -1,0 +1,29 @@
+---
+import { getCollection, render } from "astro:content";
+import type { GetStaticPaths } from "astro";
+import DevlogEntry from "../../layouts/DevlogEntry.astro";
+
+// Per-entry route. Slug is derived from filename with the YYYY-MM-DD
+// date prefix stripped (the prefix gives stable sort order and is
+// mandatory per src/content.config.ts). In production, draft entries
+// do not produce static paths; in dev, they do (and the layout shows
+// a "DRAFT" pill).
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const includeDrafts = !import.meta.env.PROD;
+  const entries = await getCollection("devlog", ({ data }) =>
+    includeDrafts || !data.draft
+  );
+  return entries.map((entry) => ({
+    params: { slug: entry.id.replace(/^\d{4}-\d{2}-\d{2}-/, "") },
+    props: { entry },
+  }));
+};
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<DevlogEntry entry={entry}>
+  <Content />
+</DevlogEntry>
