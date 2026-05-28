@@ -1,0 +1,42 @@
+---
+// Empty-state devlog placeholder. Dashed border treatment signals
+// "this slot exists, content is coming". Pattern study: Vercel
+// dashboard empty states — mono label, single short line, no fake
+// preview thumbnails.
+---
+
+<section id="devlog" class="relative">
+  <div class="mx-auto max-w-[1280px] px-6 sm:px-10 py-32 sm:py-40">
+    <div class="mb-16 flex items-baseline justify-between border-b border-grid pb-6">
+      <span class="mono-label">05 / devlog</span>
+      <span class="mono-label tabular hidden sm:inline">0 entries</span>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-[5fr_6fr] gap-14 lg:gap-20 items-start">
+      <div class="max-w-[480px]">
+        <h2 class="font-sans font-medium text-[34px] sm:text-[44px] leading-[1.05] tracking-[-0.02em] text-fg">
+          Build journal.
+        </h2>
+        <p class="mt-8 text-[16px] sm:text-[17px] leading-[1.65] text-fg-muted">
+          Honest about what works and what doesn't. First entry: coming soon.
+          When there is hardware on the bench, there will be writing about it
+          here.
+        </p>
+      </div>
+
+      <div class="relative border border-dashed border-grid bg-bg-elevated/30 p-10 sm:p-14 min-h-[280px] flex flex-col justify-center">
+        <span class="absolute top-4 left-4 mono-label">empty.state</span>
+        <span class="absolute top-4 right-4 mono-label tabular">awaiting commit</span>
+
+        <div class="text-center">
+          <p class="font-mono text-[13px] tracking-[0.06em] text-fg-muted">
+            no entries yet. git log will catch up first.
+          </p>
+          <p class="mt-4 font-mono text-[11px] text-fg-muted">
+            $ touch src/content/devlog/2026-q3-bench-prototype.mdx
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,54 @@
+---
+// Pattern study: Linear's changelog timeline (mono date eyebrow,
+// short title, one-sentence body) with Rauno's hairline left rail.
+// Dots are unfilled circles on the rail so the eye follows the line,
+// not the markers.
+
+const milestones = [
+  {
+    date: "q2 2026",
+    title: "Concept + thermal budget + control-loop sim.",
+    body: "Sizing the TEC, picking sensors, drawing the H-bridge. Closed-loop simulation in Python before any solder touches a board.",
+  },
+  {
+    date: "q3 2026",
+    title: "Bench prototype on STM32 dev board.",
+    body: "Nucleo + breadboard. First PID tuning against a Peltier dev module. Open-loop wattage curves. Honest writeup of what the COP actually looks like.",
+  },
+  {
+    date: "q4 2026",
+    title: "Custom PCB and enclosure v1.",
+    body: "KiCad layout, fab through JLCPCB. SLA-printed wristband shell. First wearable revision, probably ugly.",
+  },
+  {
+    date: "q1 2027",
+    title: "Field testing and devlog write-up.",
+    body: "Real wrist time on real hot days. Failure modes documented. The build becomes a piece of the MSc application.",
+  },
+];
+---
+
+<section class="relative">
+  <div class="mx-auto max-w-[1280px] px-6 sm:px-10 py-32 sm:py-40">
+    <div class="mb-16 flex items-baseline justify-between border-b border-grid pb-6">
+      <span class="mono-label">04 / roadmap</span>
+      <span class="mono-label tabular hidden sm:inline">4 quarters · 1 device</span>
+    </div>
+
+    <h2 class="font-sans font-medium text-[34px] sm:text-[44px] leading-[1.05] tracking-[-0.02em] text-fg mb-20 max-w-[760px]">
+      The next four quarters.
+    </h2>
+
+    <ol class="relative pl-10 sm:pl-14 max-w-[760px]">
+      <span class="absolute left-[10px] sm:left-[14px] top-2 bottom-4 w-px bg-grid" aria-hidden="true"></span>
+      {milestones.map((m) => (
+        <li class="relative pb-14 last:pb-0">
+          <span class="absolute left-[-31px] sm:left-[-35px] top-[5px] w-[11px] h-[11px] rounded-full bg-bg border border-fg-muted" aria-hidden="true"></span>
+          <span class="mono-label tabular">{m.date}</span>
+          <h3 class="mt-3 font-sans text-[20px] sm:text-[22px] leading-[1.25] tracking-[-0.01em] text-fg">{m.title}</h3>
+          <p class="mt-3 text-[15px] sm:text-[16px] leading-[1.6] text-fg-muted">{m.body}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

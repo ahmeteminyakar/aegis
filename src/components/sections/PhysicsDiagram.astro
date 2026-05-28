@@ -1,0 +1,139 @@
+---
+// Engineering cross-section of the inner wrist with TEC mounted on
+// the palmar (volar) surface. Hand-drawn vector, no asset import.
+// Aesthetic study: technical-drawing aesthetic from old anatomy
+// textbooks plus the leader-line annotation style from BerkeleyMono's
+// hardware diagrams. Hot/cold colors are scoped to the heat-flow
+// arrows only — body structure stays neutral so the thermal action
+// reads first.
+---
+
+<figure class="w-full" aria-label="Cross-section of inner wrist showing the radial and ulnar arteries beneath a Peltier element. The hot side faces upward to ambient air; the cold side faces downward toward the skin.">
+  <svg viewBox="0 0 760 540" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto" role="img">
+    <defs>
+      <radialGradient id="cold-bloom" cx="50%" cy="0%" r="62%">
+        <stop offset="0%" stop-color="#3fb4d4" stop-opacity="0.34" />
+        <stop offset="100%" stop-color="#3fb4d4" stop-opacity="0" />
+      </radialGradient>
+      <radialGradient id="hot-bloom" cx="50%" cy="100%" r="80%">
+        <stop offset="0%" stop-color="#d96b3a" stop-opacity="0.26" />
+        <stop offset="100%" stop-color="#d96b3a" stop-opacity="0" />
+      </radialGradient>
+      <marker id="arr-hot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="#d96b3a" />
+      </marker>
+      <marker id="arr-cold" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="#3fb4d4" />
+      </marker>
+      <pattern id="bone-hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="6" stroke="#2a2a30" stroke-width="1" />
+      </pattern>
+    </defs>
+
+    <!-- corner annotations -->
+    <text x="32" y="36" font-family="IBM Plex Mono" font-size="10" fill="#8a8a93" letter-spacing="1.6">
+      FIG.01 / CROSS-SECTION
+    </text>
+    <text x="32" y="52" font-family="IBM Plex Mono" font-size="10" fill="#8a8a93" letter-spacing="1.6">
+      INNER WRIST · VOLAR ASPECT
+    </text>
+    <text x="728" y="36" text-anchor="end" font-family="IBM Plex Mono" font-size="10" fill="#8a8a93" letter-spacing="1.6">
+      SCALE 1:1
+    </text>
+    <text x="728" y="52" text-anchor="end" font-family="IBM Plex Mono" font-size="10" fill="#8a8a93" letter-spacing="1.6">
+      ΔT ±6&#176;C / 30 S BURST
+    </text>
+
+    <!-- hot bloom region (above TEC) -->
+    <rect x="200" y="100" width="360" height="100" fill="url(#hot-bloom)" />
+
+    <!-- hot arrows -->
+    <g stroke="#d96b3a" stroke-width="1.4" marker-end="url(#arr-hot)" fill="none">
+      <line x1="320" y1="186" x2="320" y2="128" />
+      <line x1="360" y1="186" x2="360" y2="118" />
+      <line x1="400" y1="186" x2="400" y2="122" />
+      <line x1="440" y1="186" x2="440" y2="132" />
+    </g>
+    <text x="560" y="148" font-family="IBM Plex Mono" font-size="11" fill="#d96b3a" letter-spacing="1.4">
+      HOT SIDE → AMBIENT
+    </text>
+
+    <!-- TEC body -->
+    <rect x="290" y="190" width="180" height="44" fill="#131316" stroke="#f4f4f4" stroke-width="1.1" />
+    <line x1="290" y1="212" x2="470" y2="212" stroke="#3a3a3f" stroke-width="0.7" />
+    <text x="380" y="207" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#f4f4f4" letter-spacing="1.2">
+      TEC 40×40 mm
+    </text>
+    <text x="380" y="227" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#8a8a93" letter-spacing="1.4">
+      SINGLE-STAGE PELTIER
+    </text>
+
+    <!-- cold bloom region (below TEC, inside wrist) -->
+    <rect x="200" y="234" width="360" height="160" fill="url(#cold-bloom)" />
+
+    <!-- wrist outline (rounded rect, palmar side up) -->
+    <path
+      d="M 200 290 Q 200 234 250 234 L 510 234 Q 560 234 560 290 L 560 380 Q 560 420 510 420 L 250 420 Q 200 420 200 380 Z"
+      fill="none"
+      stroke="#8a8a93"
+      stroke-width="1.1"
+    />
+    <!-- skin surface (where TEC touches) dashed for contact emphasis -->
+    <line x1="290" y1="234" x2="470" y2="234" stroke="#f4f4f4" stroke-width="1" stroke-dasharray="2 3" />
+
+    <!-- cold arrows (TEC bottom into skin) -->
+    <g stroke="#3fb4d4" stroke-width="1.4" marker-end="url(#arr-cold)" fill="none">
+      <line x1="320" y1="234" x2="320" y2="288" />
+      <line x1="360" y1="234" x2="360" y2="278" />
+      <line x1="400" y1="234" x2="400" y2="282" />
+      <line x1="440" y1="234" x2="440" y2="276" />
+    </g>
+    <text x="560" y="278" font-family="IBM Plex Mono" font-size="11" fill="#3fb4d4" letter-spacing="1.4">
+      COLD SIDE → SKIN
+    </text>
+
+    <!-- radial artery -->
+    <circle cx="280" cy="298" r="9" fill="#2a1010" stroke="#f4f4f4" stroke-width="1" />
+    <!-- ulnar artery -->
+    <circle cx="480" cy="298" r="9" fill="#2a1010" stroke="#f4f4f4" stroke-width="1" />
+    <!-- blood flow indicator inside ulnar -->
+    <text x="480" y="302" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#f4f4f4">→</text>
+
+    <!-- bones -->
+    <ellipse cx="290" cy="380" rx="44" ry="22" fill="url(#bone-hatch)" stroke="#8a8a93" stroke-width="1" />
+    <ellipse cx="470" cy="380" rx="34" ry="18" fill="url(#bone-hatch)" stroke="#8a8a93" stroke-width="1" />
+
+    <!-- leader lines + labels -->
+    <g stroke="#3a3a3f" stroke-width="0.8" fill="none">
+      <line x1="280" y1="298" x2="160" y2="298" />
+      <line x1="480" y1="298" x2="600" y2="298" />
+      <line x1="290" y1="380" x2="140" y2="430" />
+      <line x1="470" y1="380" x2="620" y2="430" />
+    </g>
+
+    <text x="156" y="294" text-anchor="end" font-family="IBM Plex Mono" font-size="11" fill="#f4f4f4">radial a.</text>
+    <text x="156" y="308" text-anchor="end" font-family="IBM Plex Mono" font-size="9" fill="#8a8a93">~2 mm sub-dermal</text>
+
+    <text x="604" y="294" font-family="IBM Plex Mono" font-size="11" fill="#f4f4f4">ulnar a.</text>
+    <text x="604" y="308" font-family="IBM Plex Mono" font-size="9" fill="#8a8a93">blood flow →</text>
+
+    <text x="136" y="434" text-anchor="end" font-family="IBM Plex Mono" font-size="11" fill="#8a8a93">radius</text>
+    <text x="624" y="434" font-family="IBM Plex Mono" font-size="11" fill="#8a8a93">ulna</text>
+
+    <!-- scale bar -->
+    <g stroke="#8a8a93" stroke-width="1">
+      <line x1="520" y1="490" x2="640" y2="490" />
+      <line x1="520" y1="484" x2="520" y2="496" />
+      <line x1="640" y1="484" x2="640" y2="496" />
+      <line x1="580" y1="486" x2="580" y2="494" />
+    </g>
+    <text x="580" y="512" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#8a8a93" letter-spacing="1.4">
+      20 MM
+    </text>
+
+    <!-- bottom-left fineprint -->
+    <text x="32" y="512" font-family="IBM Plex Mono" font-size="9" fill="#3a3a3f" letter-spacing="1.4">
+      DIAGRAM ILLUSTRATIVE / NOT TO ANATOMICAL SCALE
+    </text>
+  </svg>
+</figure>

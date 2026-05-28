@@ -1,0 +1,41 @@
+---
+// Pattern study: BerkeleyMono's product-spec page hairline rows + value
+// column right-aligned in mono. Every numeric below is a v0 placeholder
+// — comments below mark the ones Ahmet tunes against the bench.
+
+const specs = [
+  { label: "form factor",   value: "wristband, inner-wrist mount" },
+  { label: "cooling element", value: "40 × 40 mm TEC, single stage" },           // tune: actual module from RS / Digikey BoM
+  { label: "driver",        value: "h-bridge, 4 kHz PWM" },                       // tune: confirm against EMC budget
+  { label: "sensors",       value: "skin temp · ambient temp · 6-axis IMU" },     // tune: TI TMP117 / Bosch BMI270 likely
+  { label: "mcu",           value: "STM32L4 / Cortex-M4F @ 80 MHz" },             // tune: L4 vs L4+ depending on FPU need
+  { label: "comms",         value: "BLE 5.0" },                                   // tune: nRF52 module vs STM32 BLE
+  { label: "battery",       value: "500 mAh LiPo, USB-C charging" },              // tune: PCB area constraint
+  { label: "thermal mass",  value: "graphite spreader + copper slug" },           // tune: bench
+  { label: "modes",         value: "adaptive · manual" },
+  { label: "firmware",      value: "C / Zephyr RTOS" },                           // tune: bare metal vs Zephyr
+  { label: "status",        value: "concept / pre-prototype" },
+];
+---
+
+<section class="relative">
+  <div class="mx-auto max-w-[1280px] px-6 sm:px-10 py-32 sm:py-40">
+    <div class="mb-16 flex items-baseline justify-between border-b border-grid pb-6">
+      <span class="mono-label">03 / specifications</span>
+      <span class="mono-label tabular hidden sm:inline">placeholders, tune at bench</span>
+    </div>
+
+    <h2 class="font-sans font-medium text-[34px] sm:text-[44px] leading-[1.05] tracking-[-0.02em] text-fg mb-16 max-w-[760px]">
+      What we think we are building.
+    </h2>
+
+    <dl class="border-t border-grid">
+      {specs.map((row) => (
+        <div class="grid grid-cols-[140px_1fr] sm:grid-cols-[260px_1fr] gap-6 sm:gap-12 py-5 border-b border-grid items-baseline">
+          <dt class="mono-label !text-fg-muted">{row.label}</dt>
+          <dd class="font-mono text-[13px] sm:text-[14px] text-fg tabular" set:html={row.value} />
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>

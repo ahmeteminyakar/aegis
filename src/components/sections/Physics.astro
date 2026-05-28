@@ -1,0 +1,70 @@
+---
+import PhysicsDiagram from "./PhysicsDiagram.astro";
+
+// Pattern study: Rauno's two-column with mono eyebrow row + Linear's
+// long-form prose paired with a technical illustration. No buzzwords,
+// no future-tense overpromising. Names the prior art (Embr Wave, PMV/
+// PPD) so the claim is anchored to existing research, not vibes.
+---
+
+<section class="relative">
+  <div class="mx-auto max-w-[1280px] px-6 sm:px-10 py-32 sm:py-40">
+    <div class="mb-16 flex items-baseline justify-between border-b border-grid pb-6">
+      <span class="mono-label">01 / the honest part</span>
+      <span class="mono-label tabular hidden sm:inline">mechanism · prior art · constraints</span>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-[5fr_6fr] gap-14 lg:gap-20 items-start">
+      <div class="max-w-[560px]">
+        <h2 class="font-sans font-medium text-[34px] sm:text-[44px] leading-[1.05] tracking-[-0.02em] text-fg">
+          The mechanism is real.
+          <br />
+          <span class="text-fg-muted">The constraints are too.</span>
+        </h2>
+
+        <div class="mt-10 space-y-6 text-[16px] sm:text-[17px] leading-[1.65] text-fg-muted">
+          <p>
+            The inner wrist places skin within a millimetre of two of the
+            body's most accessible arteries: the radial and the ulnar. Heat
+            moving through that skin reaches blood quickly, and the brain
+            reads the signal as an overall change in thermal comfort, not a
+            local one. This is the mechanism behind Embr Wave and the body
+            of thermal-comfort research going back to Fanger's PMV/PPD model.
+          </p>
+          <p>
+            Aegis sits on the same principle. A small Peltier element pressed
+            against the inner wrist can either pull heat off the skin or push
+            heat into it, in short bursts that feel disproportionately
+            effective. Peltier modules are not efficient at moving large
+            amounts of heat over long periods. They are excellent at
+            delivering a few watts of cooling or heating exactly where the
+            body is most receptive, for a few minutes at a time.
+          </p>
+        </div>
+
+        <ul class="mt-12 grid grid-cols-2 gap-x-6 gap-y-4 font-mono text-[12px] text-fg-muted">
+          <li class="flex justify-between border-t border-grid pt-3">
+            <span>COP target</span>
+            <span class="text-fg tabular">~1.2</span>
+          </li>
+          <li class="flex justify-between border-t border-grid pt-3">
+            <span>Burst</span>
+            <span class="text-fg tabular">30–180 s</span>
+          </li>
+          <li class="flex justify-between border-t border-grid pt-3">
+            <span>Comfort band</span>
+            <span class="text-fg tabular">32–34 &#176;c</span>
+          </li>
+          <li class="flex justify-between border-t border-grid pt-3">
+            <span>Peak draw</span>
+            <span class="text-fg tabular">~4.5 w</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="w-full">
+        <PhysicsDiagram />
+      </div>
+    </div>
+  </div>
+</section>

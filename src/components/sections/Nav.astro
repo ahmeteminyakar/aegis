@@ -1,0 +1,70 @@
+---
+// Nav. Sticky top bar, background blur activates after 80px scroll.
+// Pattern study: Linear's hairline-below-nav + monospace nav items.
+// Built as static markup; the blur toggle is one vanilla-JS listener.
+---
+
+<header
+  id="nav"
+  class="fixed top-0 inset-x-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-300"
+  style="--ease: var(--ease-cinematic);"
+>
+  <div class="mx-auto max-w-[1280px] px-6 sm:px-10">
+    <div class="flex items-center justify-between h-14">
+      <a href="#top" class="flex items-baseline gap-3 group" aria-label="Aegis home">
+        <span class="font-mono text-[15px] tracking-[0.08em] font-medium text-fg">aegis</span>
+        <span class="mono-label hidden sm:inline">v0.1 / concept</span>
+      </a>
+
+      <nav class="flex items-center gap-1 sm:gap-2">
+        <a href="#devlog" class="px-3 py-2 font-mono text-[12px] tracking-[0.06em] text-fg-muted hover:text-fg transition-colors duration-200">
+          devlog
+        </a>
+        <a href="#newsletter" class="px-3 py-2 font-mono text-[12px] tracking-[0.06em] text-fg-muted hover:text-fg transition-colors duration-200">
+          newsletter
+        </a>
+        <a
+          href="https://github.com/ahmeteminyakar"
+          target="_blank"
+          rel="noopener"
+          aria-label="GitHub"
+          class="ml-1 p-2 text-fg-muted hover:text-fg transition-colors duration-200"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+          </svg>
+        </a>
+      </nav>
+    </div>
+    <div class="hairline opacity-0 transition-opacity duration-300" id="nav-rule"></div>
+  </div>
+</header>
+
+<script is:inline>
+  // Sticky-nav blur trigger at scroll > 80px.
+  (function () {
+    const nav = document.getElementById("nav");
+    const rule = document.getElementById("nav-rule");
+    if (!nav || !rule) return;
+    const SCROLL_THRESHOLD = 80;
+    let scrolled = false;
+    function update() {
+      const isScrolled = window.scrollY > SCROLL_THRESHOLD;
+      if (isScrolled === scrolled) return;
+      scrolled = isScrolled;
+      if (scrolled) {
+        nav.style.backgroundColor = "rgba(10, 10, 11, 0.72)";
+        nav.style.backdropFilter = "blur(12px) saturate(140%)";
+        nav.style.webkitBackdropFilter = "blur(12px) saturate(140%)";
+        rule.style.opacity = "1";
+      } else {
+        nav.style.backgroundColor = "transparent";
+        nav.style.backdropFilter = "none";
+        nav.style.webkitBackdropFilter = "none";
+        rule.style.opacity = "0";
+      }
+    }
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+  })();
+</script>
