@@ -9,25 +9,21 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "brand:build": "node scripts/build-brand-assets.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.2.0",
-    "@astrojs/react": "^4.2.0",
     "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.3",
     "@fontsource/ibm-plex-mono": "^5.1.0",
     "@fontsource/inter": "^5.1.0",
     "@tailwindcss/vite": "^4.0.0",
     "astro": "^5.5.0",
-    "motion": "^12.0.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
     "reading-time": "^1.5.0",
     "tailwindcss": "^4.0.0"
   },
   "devDependencies": {
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
     "typescript": "^5.7.0"
   },
   "packageManager": "pnpm@11.4.0"

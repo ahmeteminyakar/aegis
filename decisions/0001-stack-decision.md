@@ -77,3 +77,22 @@ Negative / accepted:
   string slicing cover every case the devlog needs.
 * **MDX via `@mdx-js/mdx` directly.** Rejected. The Astro integration
   is the supported path and ships Shiki for code highlighting.
+
+## Update 2026-05-29 (React + Motion removed)
+
+React 19, react-dom, motion, and `@astrojs/react` were removed from
+the stack. The Hero text entrance, the only thing the React island
+ever did, is now CSS @keyframes with sibling `animation-delay` values
+(see `src/components/sections/Hero.astro`). `@astrojs/sitemap` was
+added in the same change.
+
+The decision logic in this ADR still holds: React was scoped to one
+component, the value-per-kilobyte ratio was bad, and CSS can express
+the same staggered fade-up-blur sequence without shipping a runtime.
+The Negative consequence about the React island bundle is no longer
+operative. Total JS shipped on `/` dropped from ~103 KB gzip to 0.
+
+If a future feature genuinely needs interactive React (real
+newsletter, real form state, search-as-you-type), re-register
+`@astrojs/react` and re-add the deps. The earlier Hero island is in
+the git history at commit 5e85060.

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# TODO: replace host with the real Cloudflare Pages URL after first deploy.
+Sitemap: https://aegis.ahmetyakar.dev/sitemap-index.xml

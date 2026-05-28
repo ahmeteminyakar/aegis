@@ -1,13 +1,15 @@
 ---
 import fs from "node:fs";
 import path from "node:path";
-import HeroIsland from "../Hero.tsx";
 
-// Hero shell. Static Astro markup wraps a React island for the text
-// entrance. The video element lives here so it streams as a plain
-// asset, not bundled by React. When public/media/hero.mp4 is absent
-// (v0 — Ahmet hasn't dropped the Midjourney export yet), we render
-// a CSS-only thermal-gradient fallback instead of a 404'd <video>.
+// Hero. Pure Astro, zero JS. The staggered fade-up-blur entrance is
+// CSS @keyframes with sibling delays (0 / 80 / 160 / 240 ms). It
+// replaces an earlier React + Motion island that shipped ~99 KB gzip
+// for one one-shot animation. See decisions/0001 update note.
+//
+// The video element streams as a plain asset. When public/media/hero.mp4
+// is absent (v0 default), we render a CSS thermal-gradient fallback
+// instead of a 404'd <video>.
 const projectRoot = process.cwd();
 const hasHeroVideo = fs.existsSync(path.join(projectRoot, "public/media/hero.mp4"));
 const hasHeroPoster = fs.existsSync(path.join(projectRoot, "public/media/hero-poster.webp"));
@@ -38,7 +40,7 @@ const hasHeroPoster = fs.existsSync(path.join(projectRoot, "public/media/hero-po
       aria-hidden="true"
     >
       <span class="absolute bottom-6 left-1/2 -translate-x-1/2 mono-label">
-        backdrop · awaiting capture
+        backdrop &middot; awaiting capture
       </span>
     </div>
   )}
@@ -50,10 +52,75 @@ const hasHeroPoster = fs.existsSync(path.join(projectRoot, "public/media/hero-po
     aria-hidden="true"
   ></div>
 
-  <HeroIsland client:load />
+  <div class="relative z-10 mx-auto max-w-[1280px] px-6 sm:px-10 w-full">
+    <div class="max-w-[920px]">
+      <div class="hero-row hero-row-1 mono-label mb-6">
+        aegis / concept &nbsp;&middot;&nbsp; q2 2026
+      </div>
+
+      <h1 class="hero-row hero-row-2 font-sans font-medium text-fg leading-[1.02] tracking-[-0.02em] text-[44px] sm:text-[64px] md:text-[80px] lg:text-[92px]">
+        Thermal comfort,
+        <br />
+        <span class="text-fg-muted">on the inside of your wrist.</span>
+      </h1>
+
+      <p class="hero-row hero-row-3 mt-8 max-w-[640px] text-[17px] sm:text-[19px] leading-[1.55] text-fg-muted">
+        A Peltier-based wristband for adaptive cooling and heating bursts.
+        Designed in the open. Built around the physics, honest about what
+        they allow.
+      </p>
+
+      <a
+        href="#how-it-works"
+        class="hero-row hero-row-4 hero-cta mt-12 inline-flex items-center gap-3 font-mono text-[13px] tracking-[0.06em] text-fg-muted hover:text-fg transition-colors duration-200 group"
+      >
+        <span aria-hidden="true" class="inline-block transition-transform duration-300 group-hover:translate-y-[2px]">
+          &darr;
+        </span>
+        how it works
+      </a>
+    </div>
+  </div>
 
   <div class="absolute inset-x-0 top-20 z-[2] flex justify-between px-6 sm:px-10 pointer-events-none">
     <span class="mono-label">lat 47.61 / lon -122.33</span>
     <span class="mono-label">ambient 21.4&deg;c / skin 33.2&deg;c</span>
   </div>
 </section>
+
+<style>
+  /* Staggered fade-up-blur. Same shape as the prior Motion sequence:
+     opacity 0 -> 1, translateY 12px -> 0, blur 8px -> 0, 600ms cinematic.
+     Delays 0/80/160/240 ms per sibling. Server-rendered HTML carries
+     the FINAL text so LCP fires on the headline, not after JS load. */
+  @keyframes hero-rise {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+      filter: blur(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+  }
+  .hero-row {
+    opacity: 0;
+    animation: hero-rise 600ms var(--ease-cinematic) forwards;
+    will-change: opacity, transform, filter;
+  }
+  .hero-row-1 { animation-delay: 0ms; }
+  .hero-row-2 { animation-delay: 80ms; }
+  .hero-row-3 { animation-delay: 160ms; }
+  .hero-row-4 { animation-delay: 240ms; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-row {
+      opacity: 1;
+      animation: none;
+      transform: none;
+      filter: none;
+    }
+  }
+</style>

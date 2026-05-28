@@ -1,18 +1,24 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import react from '@astrojs/react';
 import mdx from '@astrojs/mdx';
+import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 // Static output. Cloudflare Pages serves dist/ directly, no SSR adapter
 // needed for v0. If a future iteration wants SSR (e.g. real newsletter
 // persistence on Workers), add @astrojs/cloudflare and switch output to
 // 'server'.
+//
+// Hero entrance is CSS @keyframes; nothing on the page needs hydration,
+// so no React integration is registered. If you reintroduce an island,
+// add @astrojs/react and re-register here.
+//
+// TODO: replace `site` with the real Cloudflare Pages URL after first deploy.
 export default defineConfig({
-  site: 'https://aegis.example',
+  site: 'https://aegis.ahmetyakar.dev',
   output: 'static',
   trailingSlash: 'never',
-  integrations: [react(), mdx()],
+  integrations: [mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
   },

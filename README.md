@@ -5,7 +5,7 @@ thermal-comfort bursts. Concept stage. No hardware yet. The site is
 where the build is documented in the open.
 
 ```
-Astro 5  ·  Tailwind v4 (@theme inline)  ·  Motion  ·  pnpm  ·  Cloudflare Pages
+Astro 5  ·  Tailwind v4 (@theme inline)  ·  pnpm  ·  Cloudflare Pages
 ```
 
 ## Local development
@@ -25,14 +25,18 @@ Windows is `npm install -g pnpm@latest`. CI uses `pnpm/action-setup@v4`.
 | Section            | Component                                  | Hydration |
 | ------------------ | ------------------------------------------ | --------- |
 | Sticky nav + blur  | `src/components/sections/Nav.astro`        | inline JS |
-| Hero               | `src/components/sections/Hero.astro` +<br/>`src/components/Hero.tsx` | React island (`client:load`), Motion |
+| Hero               | `src/components/sections/Hero.astro`       | CSS @keyframes, zero JS |
 | Physics + diagram  | `src/components/sections/Physics.astro` +<br/>`src/components/sections/PhysicsDiagram.astro` | static |
 | How it works       | `src/components/sections/HowItWorks.astro` | static    |
 | Specs              | `src/components/sections/Specs.astro`      | static    |
 | Roadmap            | `src/components/sections/Roadmap.astro`    | static    |
-| Devlog placeholder | `src/components/sections/Devlog.astro`     | static    |
+| Devlog teaser      | `src/components/sections/Devlog.astro`     | static    |
 | Newsletter         | `src/components/sections/Newsletter.astro` | inline JS |
 | Footer             | `src/components/sections/Footer.astro`     | static    |
+
+Total JS shipped on `/`: 0 KB. The Hero entrance is a CSS sequence
+with sibling delays 0/80/160/240 ms and respects
+`prefers-reduced-motion`.
 
 The newsletter form is a v0 no-op: on submit it console-logs the email
 and shows an inline success state for 4s. Wiring point is commented at
@@ -97,6 +101,8 @@ The site is one layer of a multi-layer project workspace:
 | `milestones.md`      | Canonical project roadmap (mirrored in `Roadmap.astro`)   |
 | `bom/components.csv` | Hand-edited bill of materials with placeholder costs      |
 | `sim/`               | Stdlib Python simulations (`python sim/thermal_budget.py`)|
+| `src/assets/brand/`  | Source SVGs for favicon and OG image                      |
+| `scripts/`           | Build-time scripts (`pnpm brand:build`)                   |
 | `.claude/`           | Project-scoped Claude Code config and scaffolding skills  |
 
 Two Claude Code skills are installed under `.claude/skills/`:
@@ -107,21 +113,73 @@ Two Claude Code skills are installed under `.claude/skills/`:
 Hand-editing always works as the fallback. See `CLAUDE.md` for the full
 authoring contract and naming conventions.
 
-## Deploying to Cloudflare Pages
+## Brand assets
 
-Static output. No SSR adapter for v0.
+Sources live in `src/assets/brand/` as hand-built SVGs:
 
-1. Push this repo to GitHub.
-2. In Cloudflare Pages: **Create project → Connect to Git → select repo**.
-3. Build command: `pnpm build`
-4. Build output directory: `dist`
-5. Environment: `NODE_VERSION=22`
+- `aegis-wordmark.svg`  — favicon source, monochrome "A" + thermal
+  accent stripe under it (cyan to amber).
+- `aegis-og.svg`        — Open Graph card source, 1200×630, full
+  "AEGIS" wordmark on dark with the same accent stripe.
 
-Pages auto-rebuilds on push to `main`.
+To regenerate the public/ exports (`favicon.svg`, `favicon.ico`,
+`og/aegis-og.svg`, `og/aegis-og.png`):
+
+```bash
+pnpm brand:build
+```
+
+`scripts/build-brand-assets.mjs` uses `pnpm dlx sharp-cli` for SVG
+rasterisation and `pnpm dlx png-to-ico` for ICO assembly. Neither is
+a permanent project dependency. The script is invoked manually only
+when the source SVGs change.
+
+## Deploy to Cloudflare Pages
+
+Static output. No SSR adapter for v0. Cloudflare Pages serves `dist/`
+directly and respects `public/_headers` for caching + security.
+
+### First deploy (one-time, dashboard)
+
+1. Cloudflare Dashboard → **Workers & Pages** → **Create** → **Pages**
+   → **Connect to Git**.
+2. Authorise Cloudflare to access GitHub if not already done.
+   Select repository: `ahmeteminyakar/aegis`.
+3. Set up build:
+   - **Production branch**: `main`
+   - **Framework preset**: `Astro`
+   - **Build command**: `pnpm build`
+   - **Build output directory**: `dist`
+4. Environment variables → **Add variable**:
+   - `NODE_VERSION` = `22`
+5. **Save and Deploy**.
+
+Cloudflare assigns a `<project>.pages.dev` URL on first deploy.
+
+### After first deploy
+
+Find and replace the placeholder host `aegis.ahmetyakar.dev` with the
+actual deployed URL in these files:
+
+```
+astro.config.mjs         (site property)
+public/robots.txt        (Sitemap line)
+src/assets/brand/aegis-og.svg  (top-right meta line, optional)
+```
+
+`grep -rn "aegis.ahmetyakar.dev" .` finds every touchpoint. Each is
+flagged with a `// TODO` comment or visible in the rendered output.
+
+### Subsequent deploys
+
+`git push` to `main`. Cloudflare Pages rebuilds and deploys
+automatically. No manual step.
+
+### Future: SSR
 
 If a future iteration needs SSR (real newsletter persistence, dynamic
-API routes), add `@astrojs/cloudflare` and change `output: 'static'` to
-`output: 'server'` in `astro.config.mjs`.
+API routes), add `@astrojs/cloudflare` and change `output: 'static'`
+to `output: 'server'` in `astro.config.mjs`.
 
 ## Design tokens
 
