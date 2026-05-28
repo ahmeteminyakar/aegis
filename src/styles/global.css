@@ -1,0 +1,128 @@
+@import "./tokens.css";
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "ss03", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-accent-hot);
+    color: var(--color-bg);
+  }
+
+  /* mono-numerals tightened so 0/O are distinct */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  /* Linear-style eyebrow: small, mono, all-caps, generous tracking */
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-fg-muted);
+    font-weight: 500;
+  }
+
+  /* numeric ordinal (01 / ADAPTIVE) — slightly larger than eyebrow */
+  .mono-ord {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-fg-muted);
+  }
+
+  /* faint 64px grid (Rauno-style) used as decorative backdrop on dark sections */
+  .grid-bg {
+    position: relative;
+    isolation: isolate;
+  }
+  .grid-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--color-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+    background-size: 64px 64px;
+    opacity: 0.35;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 0%, transparent 90%);
+    z-index: -1;
+  }
+
+  /* 1px hairline */
+  .hairline {
+    height: 1px;
+    background: var(--color-grid);
+    width: 100%;
+  }
+
+  /* button reset + monospace pill */
+  .btn-mono {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    padding: 12px 18px;
+    background: var(--color-fg);
+    color: var(--color-bg);
+    border: 1px solid var(--color-fg);
+    transition: background 200ms var(--ease-cinematic), color 200ms var(--ease-cinematic);
+    cursor: pointer;
+  }
+  .btn-mono:hover {
+    background: transparent;
+    color: var(--color-fg);
+  }
+
+  /* input reset */
+  .input-mono {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    background: transparent;
+    color: var(--color-fg);
+    border: 1px solid var(--color-grid);
+    padding: 12px 16px;
+    width: 100%;
+    transition: border-color 200ms var(--ease-cinematic);
+  }
+  .input-mono:focus {
+    outline: none;
+    border-color: var(--color-fg-muted);
+  }
+  .input-mono::placeholder {
+    color: var(--color-fg-muted);
+    opacity: 0.5;
+  }
+}
+
+/* Reduce motion: kill long entrance animations for vestibular safety */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

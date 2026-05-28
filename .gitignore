@@ -1,0 +1,29 @@
+# build output
+dist/
+.astro/
+
+# deps
+node_modules/
+.pnpm-store/
+
+# logs
+*-debug.log*
+pnpm-debug.log*
+
+# env
+.env
+.env.*
+!.env.example
+
+# editors
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# heavy media (Midjourney MP4 + WebP posters live here, kept out of git)
+public/media/*
+!public/media/.gitkeep
+lh-report.json

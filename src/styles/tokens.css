@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+/* Self-hosted typefaces. No Google Fonts CDN for perf + privacy.
+   Inter for body, IBM Plex Mono for labels/numerics. Berkeley Mono is
+   the preferred mono once licensed — swap @fontsource/ibm-plex-mono
+   imports and the --font-mono token. */
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+
+/* Tailwind v4 @theme inline. Tokens listed here become utility classes
+   (e.g. --color-accent-hot → bg-accent-hot, text-accent-hot, border-accent-hot)
+   and remain available as raw CSS variables via var(--color-accent-hot). */
+@theme inline {
+  /* surfaces */
+  --color-bg: #0a0a0b;
+  --color-bg-elevated: #131316;
+
+  /* foreground */
+  --color-fg: #f4f4f4;
+  --color-fg-muted: #8a8a93;
+
+  /* thermal accents — TEC hot side amber, cold side cyan */
+  --color-accent-hot: #d96b3a;
+  --color-accent-cold: #3fb4d4;
+
+  /* structure: gridlines and 1px hairlines */
+  --color-grid: #1f1f24;
+
+  /* type stacks */
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* motion */
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+}
