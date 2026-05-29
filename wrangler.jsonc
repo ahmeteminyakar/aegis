@@ -1,0 +1,10 @@
+{
+  // Cloudflare Workers Static Assets config. Aegis is a pure static
+  // Astro build (no SSR adapter); this serves the built ./dist directory
+  // as a static site. `npx wrangler deploy` reads this file.
+  "name": "aegis",
+  "compatibility_date": "2026-05-01",
+  "assets": {
+    "directory": "./dist"
+  }
+}
