@@ -13,9 +13,9 @@ import tailwindcss from '@tailwindcss/vite';
 // so no React integration is registered. If you reintroduce an island,
 // add @astrojs/react and re-register here.
 //
-// TODO: replace `site` with the real Cloudflare Pages URL after first deploy.
+// Deployed via Cloudflare Workers static assets (see wrangler.jsonc).
 export default defineConfig({
-  site: 'https://aegis.ahmetyakar.dev',
+  site: 'https://aegis.ahmeteminyakar.workers.dev',
   output: 'static',
   trailingSlash: 'never',
   integrations: [mdx(), sitemap()],
