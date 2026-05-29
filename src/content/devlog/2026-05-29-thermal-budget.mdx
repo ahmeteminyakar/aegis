@@ -1,0 +1,221 @@
+---
+title: "The thermal budget for Aegis"
+date: 2026-05-29
+summary: "The napkin math, run: a 1 W wrist TEC gives about 78 minutes per charge, the cell cannot even source 2 W, and the comfort science wants dynamic bursts anyway. So burst-cycling is the design."
+tags: ["thermal", "power", "design"]
+draft: true
+---
+
+The first entry said there was a thermal budget on a napkin and a
+control-loop sketch that had not been simulated. This post takes the
+napkin and runs it. There is still no bench, no module picked, no
+firmware. Just the physics and the arithmetic, and what they rule out
+before a single part is ordered.
+
+The question underneath the whole device is simple to state. Cool a
+pulse point on the inner wrist, and does the wearer feel cooler. If the
+answer is no, there is nothing to build. So that is where the napkin
+starts.
+
+## The hypothesis
+
+The inner wrist puts the radial artery close to the surface. A
+thermoelectric cooler (a TEC, a Peltier element) pressed against that
+skin can pull heat out of a small patch. The bet is that a few degrees
+of local cooling there reads to the brain as cooler, out of proportion
+to the actual heat removed. The reference device, Embr Wave, runs on
+exactly this bet. The mechanism is not controversial. What is worth
+checking is whether the felt effect is real, and on what terms.
+
+Embr's public page is instructive for what it does not disclose. No
+contact temperature drop, no battery capacity in mAh, only perceptual
+claims. That is the gap this notebook is trying to fill: the
+thermodynamics behind the perception.
+
+## What the comfort science actually says
+
+Yes, with two conditions the marketing tends to skip.
+
+First, the stimulus has to be dynamic. Static local cooling or warming
+of a small skin area has an insignificant effect on whole-body thermal
+sensation. The effect shows up only when the stimulus changes over time
+([Wang, Zhang, Arens, Huizenga 2007](https://doi.org/10.1016/j.buildenv.2006.06.035)).
+A steady cold plate on the wrist does close to nothing for overall
+comfort. A wave does something. Later work pins the pleasure
+specifically to the rate of change of skin temperature, not the
+endpoint it settles at ([Parkinson and de Dear 2021](https://doi.org/10.1111/ina.12859)).
+
+Second, the effect is thermal alliesthesia: a transient, pleasurable
+shift in perceived comfort that decays as the body returns to
+thermoneutral. It is a perception, not a change in core temperature
+([Parkinson, de Dear, Candido 2016](https://doi.org/10.1080/09613218.2015.1082334)).
+The device is not cooling your core in any thermodynamic sense. It
+produces a sensation. That is the honest framing, and it is enough,
+because comfort is a perception to begin with. For reference, the
+neutral skin-temperature band at the wrist sits around 34.3 to 34.6 C,
+inside a whole-skin neutral zone of 30 to 36 C
+([Yu et al. 2023](https://doi.org/10.1016/j.buildenv.2023.110567)).
+The device is nudging a signal that lives in a narrow band.
+
+How large is the felt effect. The figure Embr markets is feeling up to
+9 F cooler. That number is the best-case subgroup, women in a warm
+room, from a company-affiliated study, and it is a perceived metric,
+not an air-temperature equivalent and not a core-temperature change.
+The reported average corrective power for dynamic waves of roughly 2 to
+3 C local dT is 4.5 to 5.9 F, about 2.5 to 3.3 C, within three minutes
+([Wang Z. et al. 2020](https://doi.org/10.1016/j.buildenv.2019.106443)).
+The average is the number to design against. The 9 F is a headline.
+
+## What the thermodynamics says
+
+Now the hardware side, where most of the constraints live.
+
+A TEC moving heat out of the skin does not make that heat disappear. It
+moves it to the hot side and adds the electrical work it took to move
+it. The identity is Qh = Qc + Pin: the hot side must shed the cooling
+load plus the full electrical input. On a wristband there is no fan and
+no real heatsink, just a small thermal mass and the back of the device
+against air. That mass buffers the hot side for a while, then saturates.
+In the wearable-scale experiment this budget leans on, the skin-contact
+temperature drop reached about 2.5 C and held for roughly ten minutes
+before the buffer saturated and the cooling collapsed, near 605 seconds
+([Materials 2025](https://doi.org/10.3390/ma18071576), with a companion
+simulation in [Materials 2024](https://doi.org/10.3390/ma17133266)).
+Steady-state cooling on a wristband is not on the table. The hot side
+wins eventually.
+
+Then the battery, which is the harder wall. A realistic wristband cell
+is about 350 mAh, 1.30 Wh at 3.7 V (PKCELL LP552530 class), bracketed by
+0.93 Wh at the small end and 1.85 Wh at the large. At 1 W continuous
+that is about 78 minutes per charge, which alone pushes toward
+duty-cycling. But the sharper limit is the discharge rate. A small pouch
+cell of this size tolerates roughly 1.5C continuous. At 1.30 Wh that is
+a ceiling near 1.95 W. A 1 W draw sits comfortably under it. A 2 W draw
+would demand 0.54 A, which is 1.54C, over the limit. The cell cannot
+source 2 W. It is rate-limited before it is capacity-limited. That is
+the single most useful thing the napkin says: the upper bound on
+instantaneous cooling power is set by the cell's C-rate, not by the TEC
+or the COP.
+
+For context on how small this power budget is, an independent
+precedent: a flexible mesh-armband TEC patch from UCSD ran at 0.2 W or
+less per patch ([Hong et al. 2019](https://doi.org/10.1126/sciadv.aaw0536)).
+Wrist-scale thermal devices live in the sub-watt to low-watt range.
+
+One number for proportion. The electronics, the MCU plus BLE plus the
+temperature and motion sensors, draw about 23 mW active, roughly 2
+percent of the 1 W TEC peak. The TEC dominates the energy budget so
+completely that the control logic is almost free by comparison.
+Optimize the TEC duty cycle, not the firmware's milliamps.
+
+## The budget, run
+
+The sim is pure-stdlib arithmetic over the constants above. Output
+verbatim:
+
+```
+peak draw (electrical):      1.00 W
+avg draw at 35% duty:        0.35 W
+cooling delivered (Qc):      0.70 W
+hot-side dissipation (Qh):   1.70 W  (= Qc + Pin, heatsink target)
+continuous-on runtime:       78.0 min
+PWM-duty runtime:           222.9 min
+bursts per charge (90s):       52  (energy-only; ignores PCM saturation, rest, converter loss)
+discharge ceiling (1.5C):    1.95 W
+peak draw within ceiling:     yes (1.00 W vs 1.95 W)
+note: 2.00 W draw = 0.54 A = 1.54C, exceeds 1.5C max; not feasible on this cell
+```
+
+Two lines deserve a flag. The hot-side figure uses the cooling COP
+correctly: at COP 0.7 and 1 W in, the cold side moves 0.7 W and the hot
+side has to shed 1.7 W. A first draft of this sim had the formula wrong,
+treating the 1 W as the heat pumped rather than the electrical input,
+which inflated the heatsink target to 2.43 W. The corrected identity is
+Qh = Qc + Pin. Separately, datasheets quote hot-side loads up to about
+2.6 times a module's rated Qmax near its current limit. That is a
+different reference point, not this 1.7 W operating case. And the 52
+bursts per charge line is an energy-only idealization. It divides
+battery energy by per-burst energy and ignores PCM saturation, the rest
+windows between bursts, and converter losses. Treat it as an upper
+bound, not a spec.
+
+## The synthesis
+
+Here is where the two halves meet, and it is the part that makes the
+device coherent rather than a compromise.
+
+The perception science says the effect only works if the stimulus is
+dynamic: waves, not a steady plate. The hardware says steady-state is
+impossible anyway, because the hot side saturates in about ten minutes
+and the battery gives about 78 minutes at 1 W continuous. Both sides
+point at the same answer. Cool in bursts, rest, repeat. A 90-second
+burst at 1 W followed by a rest window keeps the average draw near
+0.35 W, stretches runtime past three and a half hours, lets the hot side
+recover between bursts, and, critically, is the exact dynamic profile
+the comfort research says you need.
+
+Burst-cycling is not a battery-saving hack bolted onto a cooling device.
+It is what produces the felt effect and what the hardware can sustain,
+at the same time. The adaptive PWM duty loop is the product, not a
+concession to the battery.
+
+## The figures, and where they come from
+
+Every number above, with its evidence class. Peer-reviewed figures are
+stated plainly. Manufacturer guides, datasheets, and arithmetic
+estimates are marked as such. The one marketing claim is marked
+marketing.
+
+```
+quantity                    value             evidence        source
+--------------------------  ----------------  --------------  ---------------------
+TEC peak electrical draw    ~1 W              peer-reviewed   Materials 2025
+cooling COP (single stage)  0.3 to 0.7        mfr guides      Meerstetter, Sheetak
+skin-contact dT, poor sink  ~2.5 C for ~10 m  peer-reviewed   Materials 2025
+hot-side buffer saturation  ~605 s            peer-reviewed   Materials 2025 + 2024
+realistic wrist cell        350 mAh, 1.30 Wh  datasheet       PKCELL LP552530
+1.5C discharge ceiling      ~1.95 W           datasheet+calc  PKCELL + arithmetic
+runtime, 1 W continuous     ~78 min           estimate        1.30 Wh / 1.0 W
+runtime, 35% PWM duty       ~223 min          estimate        1.30 Wh / 0.35 W
+2 W continuous draw         not feasible      datasheet       1.54C exceeds 1.5C
+electronics active draw     ~23 mW (~2%)      datasheet       STM32L4, nRF52840
+wrist neutral skin temp     34.3 to 34.6 C    peer-reviewed   Yu 2023
+dynamic dT felt effect      4.5 to 5.9 F avg  peer-reviewed   Wang 2020
+Embr "up to 9 F cooler"     best-case subset  marketing       embrlabs.com
+```
+
+A caveat on the strongest-looking rows. The skin-dT and saturation
+figures rest substantially on one experimental paper and its companion
+simulation. On-point and credible, but not a broad multi-study consensus
+on the exact numbers. The COP range comes from manufacturer design
+guides, not raw datasheet curve reads. The runtime figures are
+arithmetic from cell energy, shown in the source column so the math is
+checkable.
+
+## What this means, and what is still unknown
+
+What the napkin settles. The device is a sub-watt, burst-cycled,
+perception-targeting wrist cooler. Peak draw is capped near 1 W by the
+cell's C-rate, not by ambition. The hot side, not the cold side, is the
+hard thermal problem. The control loop's job is to schedule dynamic
+bursts inside a roughly ten-minute hot-side budget and a 1.95 W power
+ceiling.
+
+What it does not settle, and what the bench has to answer:
+
+- The real skin-contact dT this enclosure can hold, and for how long,
+  with whatever thermal mass actually fits. The 2.5 C and 605 s figures
+  come substantially from one paper and its companion sim.
+- The actual TEC module. The 24 by 44 mm wearable-scale part in the
+  literature is a precedent, not a part number. COP here is from design
+  guides, not curves off a chosen module.
+- The control loop itself, still a sketch. Burst length, rest length,
+  and how skin-temp, ambient, and IMU inputs schedule the next burst.
+
+{/* Figure to add in a focused follow-up: skin dT vs time, rising then
+decaying as the hot-side buffer saturates near 600 s. Hand-built inline
+SVG, illustrative not measured, paired with the PhysicsDiagram work. */}
+
+Those are the next entries. The first wattmeter reading will move at
+least one of these numbers. When it does, it will be in the log, next to
+the napkin figure it replaces.

@@ -5,12 +5,12 @@
 
 const specs = [
   { label: "form factor",   value: "wristband, inner-wrist mount" },
-  { label: "cooling element", value: "40 × 40 mm TEC, single stage" },           // tune: actual module from RS / Digikey BoM
+  { label: "cooling element", value: "24 × 44 mm TEC, single stage" },           // wearable-scale precedent (Materials 2025, 10.3390/ma18071576); not a locked part, tune at BoM
   { label: "driver",        value: "h-bridge, 4 kHz PWM" },                       // tune: confirm against EMC budget
   { label: "sensors",       value: "skin temp · ambient temp · 6-axis IMU" },     // tune: TI TMP117 / Bosch BMI270 likely
   { label: "mcu",           value: "STM32L4 / Cortex-M4F @ 80 MHz" },             // tune: L4 vs L4+ depending on FPU need
   { label: "comms",         value: "BLE 5.0" },                                   // tune: nRF52 module vs STM32 BLE
-  { label: "battery",       value: "500 mAh LiPo, USB-C charging" },              // tune: PCB area constraint
+  { label: "battery",       value: "350 mAh LiPo (1.3 Wh), USB-C charging" },     // PKCELL LP552530 class; bracket 250-500 mAh by PCB area, tune at bench
   { label: "thermal mass",  value: "graphite spreader + copper slug" },           // tune: bench
   { label: "modes",         value: "adaptive · manual" },
   { label: "firmware",      value: "C / Zephyr RTOS" },                           // tune: bare metal vs Zephyr

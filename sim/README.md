@@ -12,8 +12,7 @@ promote it to its own subdirectory under `sim/` with its own
 ## thermal_budget.py
 
 Back-of-envelope thermal budget. Inputs are module-level constants at
-the top of the file. Edit those, run the script, read the six-line
-summary.
+the top of the file. Edit those, run the script, read the summary.
 
 ```bash
 python sim/thermal_budget.py
@@ -22,13 +21,20 @@ python sim/thermal_budget.py
 Output:
 
 ```
-peak draw:                   4.50 W
-avg draw at  35% duty:       1.57 W
-continuous-on runtime:       24.7 min
-PWM-duty runtime:            70.5 min
-bursts per charge (90s):      16
-hot-side dissipation:        8.25 W (heatsink target)
+peak draw (electrical):      1.00 W
+avg draw at 35% duty:        0.35 W
+cooling delivered (Qc):      0.70 W
+hot-side dissipation (Qh):   1.70 W  (= Qc + Pin, heatsink target)
+continuous-on runtime:       78.0 min
+PWM-duty runtime:           222.9 min
+bursts per charge (90s):       52  (energy-only; ignores PCM saturation, rest, converter loss)
+discharge ceiling (1.5C):    1.95 W
+peak draw within ceiling:     yes (1.00 W vs 1.95 W)
+note: 2.00 W draw = 0.54 A = 1.54C, exceeds 1.5C max; not feasible on this cell
 ```
 
-Every number is a placeholder. Update the constants in the script as
-bench measurements come in.
+As of the 2026-05-29 research pass these constants are grounded in cited
+sources (TEC physics, the cell datasheet, the thermal-comfort literature)
+rather than guesses. The DOIs are in the script header. They are still
+starting points, not bench measurements: update them as real hardware
+data comes in.
