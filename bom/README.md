@@ -3,6 +3,11 @@
 Hand-edited bill of materials for the Aegis wristband. Single source of
 truth: `components.csv`.
 
+`components.csv` is the Stages 0-2 prototype buy-now list: the parts to
+order to de-risk the thermal and perception hypothesis on the bench.
+Production-target parts are not in this file. They live in ADR 0003 as
+Stage 3 candidates, pending Stage 2 validation.
+
 ## Format
 
 CSV with this header, in order:
@@ -37,5 +42,5 @@ For now, edit by hand.
 * Not a CAD-coupled netlist. The schematic and PCB live in a separate
   KiCad project once they exist; this file is the human-readable
   parts list for sourcing and cost estimation.
-* Not a production BOM. Until real parts are ordered, every row is a
-  candidate.
+* Not a production BOM. This is the Stages 0-2 prototype buy-now list;
+  production-target parts live in ADR 0003 as Stage 3 candidates.

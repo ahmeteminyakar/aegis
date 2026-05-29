@@ -1,8 +1,36 @@
 ref,description,qty,part_no,supplier,unit_cost_usd,link,notes
-TEC1,Peltier module 40x40mm single-stage,1,TEC1-12706,Digikey,5.50,https://www.digikey.com/,placeholder pending bench evaluation
-U1,STM32L4 Cortex-M4F low-power MCU,1,STM32L432KCU6,Mouser,8.20,https://www.mouser.com/,placeholder L4 vs L4-plus depends on FPU need
-BT1,LiPo 500mAh single-cell,1,PL-401221,Adafruit,7.95,https://www.adafruit.com/,placeholder PCB area constraint
-U2,LiPo BMS protection IC pair,1,DW01A+FS8205A,Digikey,0.40,https://www.digikey.com/,placeholder integrated BMS module candidate
-J1,USB-C receptacle 24-pin,1,USB4085-30-A,Digikey,1.20,https://www.digikey.com/,placeholder confirm against enclosure thickness
-U3,6-axis IMU,1,BMI270,Mouser,3.80,https://www.mouser.com/,placeholder Bosch BMI270 candidate
-U4,Skin-temperature sensor I2C,1,TMP117,Mouser,4.10,https://www.mouser.com/,placeholder TI TMP117 candidate
+PROTO-ESP32S3,ESP32-S3 development board,1,ESP32-S3-DevKitC-1,owned,0.00,,owned; fast bring-up + built-in BLE telemetry
+PROTO-F411RE,STM32F411RE Nucleo-64 board,1,NUCLEO-F411RE,owned,0.00,,owned; real-time control-loop board
+TEC-4040,Peltier module 40x40mm single-stage,4,TEC1-12706,AliExpress,3.00,TBD at order,[S0/S1] bench only; oversized vs 24x44mm wearable precedent; drive gently from current-limited supply; est
+TEC-1515,Mini Peltier module 15x15mm,2,TES1-3103,AliExpress,3.00,TBD at order,[S2] wearable-scale module; est
+TEC-2020,Mini Peltier module 20x20mm,2,,AliExpress,3.50,TBD at order,[S2] wearable-scale module; est
+TEC-3030,Mini Peltier module 30x30mm,2,,AliExpress,4.00,TBD at order,[S2] wearable-scale; closest to 24x44mm precedent by area; est
+DRV-8833,DRV8833 dual H-bridge motor driver breakout,2,DRV8833,AliExpress,2.50,TBD at order,[S1] PWM drive + cool/heat reverse; est
+INA-219,INA219 current and power monitor breakout,2,INA219,AliExpress,2.50,TBD at order,[S1] measure real TEC draw vs the 1.95W ceiling; est
+TEMP-SKIN,MAX30205 skin-temperature sensor breakout,2,MAX30205,Mouser,6.00,TBD at order,[S1] skin-grade temp; source genuine; est
+TEMP-AMB,SHT31 temperature and humidity sensor breakout,1,SHT31,Mouser,3.50,TBD at order,[S1] ambient + dew-point condensation watch; AHT20 cheaper alt; est
+TEMP-PROBE,DS18B20 waterproof temperature probe,4,DS18B20,AliExpress,2.00,TBD at order,[S0] tape to TEC hot/cold surfaces; est
+TEMP-NTC,NTC 10k thermistor assortment kit,1,,AliExpress,3.00,TBD at order,[S0] cheap backup temps; est
+IMU-6050,MPU6050 6-axis IMU breakout,1,MPU6050,AliExpress,2.50,TBD at order,[S1] activity input for adaptive mode; est
+BAT-350,LiPo 3.7V 350mAh cell with JST-PH,2,,AliExpress,5.00,TBD at order,[S2] realistic wristband cell; 1.5C ceiling ~1.95W; do not exceed; est
+BAT-500,LiPo 3.7V 500mAh cell with JST-PH,1,,AliExpress,6.00,TBD at order,[S2] upper-bracket cell; 1.5C ceiling ~2.78W; est
+BAT-1000,LiPo 3.7V 1000mAh cell with JST-PH,1,,AliExpress,7.00,TBD at order,[S1] bench convenience cell; 1.5C ceiling ~5.55W headroom; est
+CHG-TP4056,TP4056 USB-C charge module with protection,5,TP4056,AliExpress,1.00,TBD at order,[S1] charge + basic cell protection; est
+PWR-PD,USB-C PD trigger board,2,ZY12PDN,AliExpress,4.00,TBD at order,[S0] bench TEC power from USB-C PD; est
+PWR-BUCK,Adjustable buck converter LM2596 or MP1584,3,LM2596,AliExpress,1.50,TBD at order,[S0] set TEC drive voltage; est
+BAT-BAG,LiPo safety charging and storage bag,1,,AliExpress,5.00,TBD at order,[S1] LiPo safety; est
+THM-SINK,Aluminum heatsink assortment kit,1,,AliExpress,5.00,TBD at order,[S0] bench hot-side heatsinks; est
+THM-FAN,5V 30-40mm cooling fan,2,,AliExpress,3.00,TBD at order,[S0] bench hot-side rejection; est
+THM-PASTE,Thermal paste tube,1,,AliExpress,3.00,TBD at order,[S0] thermal interface; est
+THM-PAD,Thermal pad assortment sheet,1,,AliExpress,4.00,TBD at order,[S1] thermal interface pads; est
+THM-COPPER,Copper block offcut with graphite thermal pad,1,,local TR shop,8.00,TBD at order,[S2] wearable hot-side mass + spreader; graphite pad via AliExpress; est
+THM-PCM,PCM pack 28-32C phase-change,1,,AliExpress,5.00,TBD at order,[S2] hot-side buffer research item; est
+PROTO-BOARD,Perfboard and protoboard assortment kit,1,,AliExpress,4.00,TBD at order,[S1] bench wiring; est
+PROTO-JST,JST-PH connector and crimp kit,1,,AliExpress,5.00,TBD at order,[S1] cell + module connectors; est
+PROTO-KAPTON,Kapton tape roll,1,,AliExpress,3.00,TBD at order,[S0] heat-resistant; secure on skin; est
+PROTO-WIRE,Heat-shrink and hookup wire kit,1,,AliExpress,5.00,TBD at order,[S0] wiring; est
+PROTO-STRAP,Velcro or watch strap for wrist mount,1,,AliExpress,3.00,TBD at order,[S2] wrist mount; est
+TOOL-IRTEMP,IR thermometer or K-type thermocouple meter,1,,AliExpress,18.00,TBD at order,[S0] surface temps; owned? verify; buy only if absent; est
+TOOL-USBMETER,USB power meter,1,,AliExpress,10.00,TBD at order,[S1] quick USB draw checks; owned? verify; buy only if absent; est
+TOOL-PSU,Bench PSU with current limit,1,,AliExpress,50.00,TBD at order,[S0] current-limited TEC drive; current limit is a TEC-on-skin safety feature; strongly recommended if absent; est
+TOOL-DMM,Multimeter and soldering kit,1,,owned,0.00,,owned? verify; bench soldering + multimeter for all stages

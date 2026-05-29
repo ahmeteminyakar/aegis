@@ -41,6 +41,7 @@ Two paths:
 
 * [0001. Stack: Astro 5 + Tailwind v4 + Motion + MDX + Cloudflare Pages](0001-stack-decision.md)
 * [0002. Design language: engineer-honest, thermal-duality, no AI slop](0002-design-language.md)
+* [0003. Prototype hardware vs production-target parts](0003-prototype-vs-production-hardware.md)
 
 ## References
 
